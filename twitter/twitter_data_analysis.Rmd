@@ -1,0 +1,82 @@
+---
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(root.dir="~/Documents/Andrea/LesFlick/data_reporting/",echo = FALSE, fig.width=7, fig.height=10)
+file_path <- "data/test/tweet_activity_metrics_LesFlicks_20200201_20200301_en.csv"
+output_path <- "output/2020_05_25/"
+```
+
+## Report content
+Some text...
+
+```{r set_up}
+source('src/utils.R')
+title_var <- "Twitter Data Analysis"
+twitter_data <- get_data(file_path)
+date_range <- get_date_range(twitter_data)
+subtitle_var <- paste("Period: ", date_range, collapse = "")
+```
+---
+title: `r title_var`
+subtitle: `r date_range`
+date: `r format(Sys.Date(), format="%d %B %Y")`
+---
+
+## Summary
+* There were **`r nrow(twitter_data)`** Tweets this month
+* The average number of Tweets was `r format(mean(table(twitter_data$date)), digits = 4)` ranging from `r format(min(table(twitter_data$date)))` to `r format(max(table(twitter_data$date)))` Tweets per day.
+
+### Top 5 url clicks
+
+### Top 5 impressions 
+
+### Top 5 engagements
+
+<!-- TODOS 20200526  -->
+<!-- Add summary info  -->
+<!-- How many tweets  --
+<!-- Average number of tweets per day  -->
+<!-- Max number of tweets in a day  -->
+<!-- Include Top 5 url clicks  -->
+<!-- Include Top 5 impressions table  -->
+<!-- Include Top 5 engagements table  -->
+<!-- Add Mentions and impressions plot  -->
+<!-- Find out meaning of media views and media engagement  -->
+<!-- Bottom XX  -->
+<!-- Engagements  -->
+<!-- Media views   -->
+<!-- etc  -->
+<!-- MAKE TOP X var  -->
+<!-- Summary version (top 5 XX) AND detailed version (top YY)  -->
+<!-- PLOTS  -->
+<!-- x: average number of messages per hour   -->
+<!-- y: average impressions / engagements  -->
+<!-- facet: per day  -->
+<!-- Find out if retweets are included in data   -->
+
+## impressions_by_day_time
+Some plots... Note the difference in the y-axis values.
+
+```{r impressions_plot, fig.height = 7, fig.width = 7}
+p <- plot_impressions_by_day_time(twitter_data, output_path)
+print(p)
+```
+
+## hashtags cliks
+```{r hastag_plot, fig.height = 7, fig.width = 7}
+p2 <- plot_hashtags(twitter_data, output_path)
+print(p2)
+```
+
+## numbers
+Some tables
+```{r tables, results = 'asis'}
+out <- get_top_quantitative(twitter_data)
+for(o in out){ 
+  print(knitr::kable(o, row.names = FALSE, align = "l"), caption = "\n")
+  }
+# knitr::kable(out[[1]], row.names = FALSE, align = "l")
+```
+
